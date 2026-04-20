@@ -1,0 +1,42 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+jobs:
+  automation-test-job:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run unit/integration/component tests
+        run: npm test
+
+      - name: Run build
+        run: npm run build
+
+      - name: Run end-to-end login test
+        uses: cypress-io/github-action@v6
+        with:
+          start: npm run dev -- --host 127.0.0.1 --port 4173
+          wait-on: http://127.0.0.1:4173
+          wait-on-timeout: 120
+          browser: electron
+          config-file: cypress.config.js
