@@ -1,112 +1,144 @@
-# Forum App Testing and CI/CD Submission
+# Forum App
 
-Proyek ini merupakan aplikasi Forum Diskusi React dengan automation testing (unit, thunk, component, e2e) dan integrasi CI/CD.
+Forum App adalah aplikasi diskusi berbasis React yang menerapkan praktik pengembangan modern: state management terstruktur, pengujian berlapis, dan pipeline CI/CD otomatis.
 
-## Tech Stack
+## Tujuan Proyek
 
-- React + Vite
-- Redux Toolkit + Redux Thunk
-- React Router
-- Jest + React Testing Library
-- Cypress
-- GitHub Actions (Continuous Integration)
-- Vercel (Continuous Deployment)
-- React Hook Form (React ecosystem tambahan)
+Proyek ini dibangun untuk menunjukkan implementasi end-to-end aplikasi frontend yang tidak hanya berjalan di browser, tetapi juga terukur kualitasnya melalui:
 
-## Menjalankan Proyek
+- Struktur kode modular.
+- Validasi fungsional lewat unit, thunk, component, dan e2e test.
+- Otomasi quality gate di GitHub Actions.
+- Deploy otomatis ke Vercel.
 
-1. Install dependency:
+## Fitur Utama
+
+- Autentikasi pengguna (register, login, profil).
+- Menampilkan daftar thread dan detail thread.
+- Menambahkan thread baru.
+- Menambahkan komentar pada thread.
+- Voting thread dan komentar.
+- Filter thread berdasarkan kategori.
+- Halaman leaderboard aktivitas pengguna.
+- Internationalization (i18n) dan preferensi bahasa.
+
+## Arsitektur Singkat
+
+### 1. Frontend Layer
+
+- React + Vite untuk SPA yang ringan dan cepat.
+- React Router untuk navigasi multi-halaman.
+- Komponen dipisah antara komponen umum dan komponen halaman.
+
+### 2. State Layer
+
+- Redux Toolkit sebagai state container utama.
+- Redux Thunk untuk asynchronous flow (fetch data API, aksi login, create thread, vote, komentar).
+- State dipisah per domain (threads, thread detail, auth user, categories, leaderboards, users, preferences, loading).
+
+### 3. Data Layer
+
+- API abstraction diletakkan terpisah agar komponen tidak langsung bergantung pada detail request.
+- Utility helper dipisahkan untuk format tanggal, text, notifikasi, dan translasi.
+
+## Kualitas dan Pengujian
+
+Strategi testing menggunakan pendekatan berlapis:
+
+- Reducer test untuk menjamin perubahan state sinkron dengan action.
+- Thunk test untuk memastikan alur async dan side effect berjalan benar.
+- Component test untuk perilaku UI dan interaksi user.
+- End-to-end test untuk validasi alur login dari sisi pengguna.
+
+Daftar pengujian utama:
+
+- Reducer tests
+  - src/states/__tests__/threadsSlice.test.js
+  - src/states/__tests__/threadDetailSlice.test.js
+- Thunk tests
+  - src/states/__tests__/thunks.test.js
+- Component tests
+  - src/components/__tests__/CategoryFilter.test.jsx
+  - src/pages/__tests__/LoginPage.test.jsx
+- E2E test
+  - cypress/e2e/login.cy.js
+
+## CI/CD Overview
+
+Pipeline CI ada di `.github/workflows/ci.yml` dan berjalan untuk validasi otomatis setiap perubahan kode.
+
+Tahapan quality gate:
+
+1. Install dependency (`npm ci`)
+2. Lint (`npm run lint`)
+3. Test (`npm test`)
+4. Build (`npm run build`)
+5. E2E Cypress (`npm run e2e`)
+
+Deploy production dijalankan via Vercel dengan output build dari folder `dist`.
+
+## Menjalankan Proyek Secara Lokal
+
+Install dependency:
 
 ```bash
 npm install
 ```
 
-2. Jalankan development server:
+Jalankan development server:
 
 ```bash
 npm run dev
 ```
 
+Build production:
+
+```bash
+npm run build
+```
+
+Preview hasil build:
+
+```bash
+npm run preview
+```
+
 ## Menjalankan Pengujian
 
-### 1) Unit, Thunk, dan Component Test
+Lint:
+
+```bash
+npm run lint
+```
+
+Unit, thunk, component tests:
 
 ```bash
 npm test
 ```
 
-### 2) End-to-End Test (alur login)
+End-to-end tests:
 
 ```bash
 npm run e2e
 ```
 
-## Struktur Pengujian
+## Struktur Folder Penting
 
-- Reducer tests:
-	- `src/states/__tests__/threadsSlice.test.js`
-	- `src/states/__tests__/threadDetailSlice.test.js`
-- Thunk tests:
-	- `src/states/__tests__/thunks.test.js`
-- React component tests:
-	- `src/components/__tests__/CategoryFilter.test.jsx`
-	- `src/pages/__tests__/LoginPage.test.jsx`
-- End-to-end login test:
-	- `cypress/e2e/login.cy.js`
+- src/api: komunikasi data dengan backend API.
+- src/states: redux slice, thunk, dan testing state logic.
+- src/components: komponen reusable UI.
+- src/pages: komponen level halaman.
+- src/hooks: custom hooks aplikasi.
+- src/i18n: konfigurasi bahasa dan terjemahan.
+- src/utils: helper utility umum.
+- cypress/e2e: skenario end-to-end test.
+- screenshot: bukti CI/CD untuk kebutuhan submission.
 
-## CI dengan GitHub Actions
+## Bukti Submission CI/CD
 
-Workflow CI tersedia di:
+Simpan bukti screenshot pada folder `screenshot` dengan nama berikut:
 
-- `.github/workflows/ci.yml`
-
-Pipeline akan menjalankan:
-
-1. `npm ci`
-2. `npm run lint`
-3. `npm test`
-4. `npm run build`
-5. Cypress e2e login test
-
-## Deploy ke Vercel (Step by Step)
-
-1. Push proyek ke GitHub repository.
-2. Buka [Vercel Dashboard](https://vercel.com/dashboard).
-3. Klik **Add New Project**.
-4. Pilih repository ini.
-5. Framework preset biasanya otomatis terdeteksi sebagai **Vite**.
-6. Pastikan build settings:
-	 - Build Command: `npm run build`
-	 - Output Directory: `dist`
-7. Klik **Deploy**.
-8. Setelah deploy sukses, salin URL Vercel dan masukkan ke catatan submission.
-
-Catatan:
-
-- File `vercel.json` sudah disiapkan untuk fallback route SPA React Router.
-
-## Branch Protection (Step by Step)
-
-1. Buka repository di GitHub.
-2. Masuk ke **Settings** > **Branches**.
-3. Pada **Branch protection rules**, klik **Add rule**.
-4. Isi branch name pattern: `main` (atau default branch repository Anda).
-5. Centang:
-	 - **Require a pull request before merging**
-	 - **Require status checks to pass before merging**
-6. Pada status check, pilih job CI: `automation-test-job`.
-7. Simpan rule.
-
-## Bukti Screenshot untuk Submission
-
-Simpan file screenshot di folder:
-
-- `screenshot/1_ci_check_error.png`
-- `screenshot/2_ci_check_pass.png`
-- `screenshot/3_branch_protection.png`
-
-Sebelum upload ZIP submission:
-
-1. Pastikan folder `node_modules` tidak ikut di-zip.
-2. Pastikan folder `screenshot` berisi ketiga bukti di atas.
-3. Pastikan URL Vercel dicantumkan pada catatan submission.
+1. 1_ci_check_error.png
+2. 2_ci_check_pass.png
+3. 3_branch_protection.png
