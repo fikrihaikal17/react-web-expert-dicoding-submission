@@ -135,10 +135,3 @@ npm run e2e
 - cypress/e2e: skenario end-to-end test.
 - screenshot: bukti CI/CD untuk kebutuhan submission.
 
-## Bukti Submission CI/CD
-
-Simpan bukti screenshot pada folder `screenshot` dengan nama berikut:
-
-1. 1_ci_check_error.png
-2. 2_ci_check_pass.png
-3. 3_branch_protection.png
