@@ -134,6 +134,3 @@ npm run e2e
 - src/utils: helper utility umum.
 - cypress/e2e: skenario end-to-end test.
 - screenshot: bukti CI/CD untuk kebutuhan submission.
-
-
-
