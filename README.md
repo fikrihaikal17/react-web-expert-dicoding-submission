@@ -90,7 +90,7 @@ Catatan:
 1. Buka repository di GitHub.
 2. Masuk ke **Settings** > **Branches**.
 3. Pada **Branch protection rules**, klik **Add rule**.
-4. Isi branch name pattern: `master`.
+4. Isi branch name pattern: `main` (atau default branch repository Anda).
 5. Centang:
 	 - **Require a pull request before merging**
 	 - **Require status checks to pass before merging**
