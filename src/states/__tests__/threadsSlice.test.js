@@ -52,4 +52,8 @@ describe('threadsSlice reducer', () => {
     expect(nextState[0].upVotesBy).toEqual(['user-1']);
     expect(nextState[0].downVotesBy).toEqual([]);
   });
+
+  it('force fail for screenshot', () => {
+    expect(true).toBe(false);
+  });
 });
